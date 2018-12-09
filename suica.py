@@ -20,11 +20,7 @@ target_req_suica = nfc.clf.RemoteTarget("212F")
 # 0003 == Suica
 target_req_suica.sensf_req = bytearray.fromhex("0000030000")
 
-my_idm = os.getenv("IDM", "Not set")
-print 'My idm = ' + my_idm
-sys.stdout.flush()
-
-def print_if_touched():
+def read():
   clf = nfc.ContactlessFrontend('usb')
   target_res = clf.sense(target_req_suica, iterations=int(TIME_cycle//TIME_interval)+1 , interval=TIME_interval)
   idm = ''
@@ -40,19 +36,13 @@ def print_if_touched():
   clf.close()
   return idm
 
-if __name__ == '__main__':
-  servo.start()
-  servo.rotate_0()
-  servo.stop()
+def initialize():
   print 'Suica waiting...'
   sys.stdout.flush()
+
+if __name__ == '__main__':
+  initialize()
   while True:
-    idm = print_if_touched()
-    if idm == my_idm:
-      servo.start()
-      servo.rotate_0()
-      servo.rotate_90()
-      servo.rotate_0()
-      servo.stop()
+    read()
     time.sleep(TIME_wait)
 

@@ -26,9 +26,13 @@ def stop():
   servo = None
   GPIO.cleanup()
 
-if __name__ == '__main__':
+def initialize():
   start()
   rotate_0()
+  stop()
+
+if __name__ == '__main__':
+  initialize()
   rotate_90()
   stop()
 
