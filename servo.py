@@ -5,22 +5,30 @@ gp_out = 18
 servo = None
 
 def start():
+  global servo
   GPIO.setmode(GPIO.BCM)
   GPIO.setup(gp_out, GPIO.OUT)
   servo = GPIO.PWM(gp_out, 50)
   servo.start(0)
+  time.sleep(0.5)
 
-def rotate_90():
+def rotate_0():
   servo.ChangeDutyCycle(2.5)
   time.sleep(0.5)
 
+def rotate_90():
+  servo.ChangeDutyCycle(7.25)
+  time.sleep(0.5)
+
 def stop():
+  global servo
   servo.stop()
   servo = None
   GPIO.cleanup()
 
 if __name__ == '__main__':
   start()
+  rotate_0()
   rotate_90()
   stop()
 

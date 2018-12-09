@@ -5,8 +5,9 @@ import nfc
 import time
 from threading import Thread, Timer
 import sys
+import os
 
-from . import servo
+import servo
 
 # Original -> https://qiita.com/undo0530/items/89540a03252e2d8f291b
 
@@ -19,6 +20,9 @@ target_req_suica = nfc.clf.RemoteTarget("212F")
 # 0003 == Suica
 target_req_suica.sensf_req = bytearray.fromhex("0000030000")
 
+my_idm = os.getenv("IDM", "Not set")
+print 'My idm = ' + my_idm
+sys.stdout.flush()
 
 def print_if_touched():
   clf = nfc.ContactlessFrontend('usb')
@@ -37,11 +41,18 @@ def print_if_touched():
   return idm
 
 if __name__ == '__main__':
+  servo.start()
+  servo.rotate_0()
+  servo.stop()
   print 'Suica waiting...'
   sys.stdout.flush()
   while True:
     idm = print_if_touched()
-    # print 'sleep ' + str(TIME_wait) + ' seconds'
-    # sys.stdout.flush()
+    if idm == my_idm:
+      servo.start()
+      servo.rotate_0()
+      servo.rotate_90()
+      servo.rotate_0()
+      servo.stop()
     time.sleep(TIME_wait)
 
