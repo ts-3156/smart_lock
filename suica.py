@@ -6,6 +6,8 @@ import time
 from threading import Thread, Timer
 import sys
 
+from . import servo
+
 # Original -> https://qiita.com/undo0530/items/89540a03252e2d8f291b
 
 TIME_cycle = 1.0
@@ -21,8 +23,9 @@ target_req_suica.sensf_req = bytearray.fromhex("0000030000")
 def print_if_touched():
   clf = nfc.ContactlessFrontend('usb')
   target_res = clf.sense(target_req_suica, iterations=int(TIME_cycle//TIME_interval)+1 , interval=TIME_interval)
+  idm = ''
 
-  if target_res != None:
+  if target_res is not None:
     tag = nfc.tag.activate_tt3(clf, target_res)
     tag.sys = 3
 
@@ -31,12 +34,13 @@ def print_if_touched():
     sys.stdout.flush()
 
   clf.close()
+  return idm
 
 if __name__ == '__main__':
   print 'Suica waiting...'
   sys.stdout.flush()
   while True:
-    print_if_touched()
+    idm = print_if_touched()
     # print 'sleep ' + str(TIME_wait) + ' seconds'
     # sys.stdout.flush()
     time.sleep(TIME_wait)
