@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 
 import servo
 import suica
