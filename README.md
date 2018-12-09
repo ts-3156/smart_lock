@@ -31,6 +31,7 @@ https://howchoo.com/g/mzgzy2mwowj/how-to-set-up-raspberry-pi-without-keyboard-mo
 
 ```sh
 sudo apt-get install -y supervisor
+sudo pip install nfcpy
 ```
 
 ```sh
