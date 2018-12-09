@@ -10,27 +10,26 @@ import sys
 
 TIME_cycle = 1.0
 TIME_interval = 0.2
-TIME_wait = 3
+TIME_wait = 1
 
 # 212F == FeliCa
 target_req_suica = nfc.clf.RemoteTarget("212F")
 # 0003 == Suica
 target_req_suica.sensf_req = bytearray.fromhex("0000030000")
 
+
 def print_if_touched():
   clf = nfc.ContactlessFrontend('usb')
   target_res = clf.sense(target_req_suica, iterations=int(TIME_cycle//TIME_interval)+1 , interval=TIME_interval)
 
-  if target_res == None:
-    clf.close()
-    return
+  if target_res != None:
+    tag = nfc.tag.activate_tt3(clf, target_res)
+    tag.sys = 3
 
-  tag = nfc.tag.activate_tt3(clf, target_res)
-  tag.sys = 3
+    idm = binascii.hexlify(tag.idm)
+    print 'Suica detected. idm = ' + idm
+    sys.stdout.flush()
 
-  idm = binascii.hexlify(tag.idm)
-  print 'Suica detected. idm = ' + idm
-  sys.stdout.flush()
   clf.close()
 
 if __name__ == '__main__':
