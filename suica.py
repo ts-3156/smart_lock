@@ -5,7 +5,6 @@ import nfc
 import time
 from threading import Thread, Timer
 import sys
-import os
 
 import servo
 
